@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta
+    name="theme-color"
+    content="#ffffff"
+  >
+
+  <title>HIKERU</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <header class="topbar">
+
+      <div class="brand">
+
+        <div
+          class="brand-mark"
+          aria-hidden="true"
+        >
+          ♪
+        </div>
+
+        <div>
+
+          <h1>
+            HIKERU
+          </h1>
+
+          <p>
+            わからないリズムを、見て・聴いて理解する。
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="top-actions">
+
+        <nav
+          class="view-tabs"
+          aria-label="画面切り替え"
+        >
+
+          <button
+            class="view-tab is-active"
+            data-view="editor"
+            type="button"
+          >
+            譜面入力
+          </button>
+
+          <button
+            class="view-tab"
+            data-view="reference"
+            type="button"
+          >
+            音符・記号一覧
+          </button>
+
+        </nav>
+
+
+        <button
+          id="help-button"
+          class="help-button"
+          type="button"
+        >
+          ? 使い方
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <main>
+
+      <!-- =====================================
+           EDITOR VIEW
+      ====================================== -->
+
+      <section
+        id="editor-view"
+        class="view"
+      >
+
+        <!-- =================================
+             INTRO
+        ================================== -->
+
+        <section class="hero-grid">
+
+          <div class="panel intro-panel">
+
+            <div class="eyebrow">
+              RHYTHM PRACTICE
+            </div>
+
+            <h2>
+              弾くタイミングを、音で確かめる。
+            </h2>
+
+            <p>
+              最大2小節のリズムを入力して、
+              見ながら・聴きながら確認できます。
+            </p>
+
+          </div>
+
+
+          <!-- =================================
+               SESSION CONTROLS
+          ================================== -->
+
+          <div class="session-controls">
+
+            <div class="mini-card bpm-card">
+
+              <span class="mini-label">
+                BPM
+              </span>
+
+              <div class="bpm-row">
+
+                <button
+                  id="bpm-down"
+                  type="button"
+                  aria-label="BPMを下げる"
+                >
+                  −
+                </button>
+
+                <input
+                  id="bpm"
+                  type="number"
+                  value="120"
+                  min="30"
+                  max="300"
+                  inputmode="numeric"
+                  aria-label="BPM"
+                >
+
+                <button
+                  id="bpm-up"
+                  type="button"
+                  aria-label="BPMを上げる"
+                >
+                  ＋
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="mini-card">
+
+              <span class="mini-label">
+                拍子
+              </span>
+
+              <strong class="fixed-value">
+                4 / 4
+              </strong>
+
+            </div>
+
+
+            <label
+              class="mini-card toggle-card"
+              for="metronome-toggle"
+            >
+
+              <span>
+
+                <span class="mini-label">
+                  メトロノーム
+                </span>
+
+                <strong>
+                  クリック音
+                </strong>
+
+              </span>
+
+              <input
+                id="metronome-toggle"
+                type="checkbox"
+                checked
+              >
+
+              <span
+                class="switch"
+                aria-hidden="true"
+              ></span>
+
+            </label>
+
+
+            <div class="mini-card sound-card">
+
+              <label
+                class="mini-label"
+                for="sound-mode"
+              >
+                音色
+              </label>
+
+              <select
+                id="sound-mode"
+                class="sound-select"
+                aria-label="再生音色"
+              >
+
+                <option value="synth">
+                  シンセ
+                </option>
+
+                <option value="kick">
+                  キック
+                </option>
+
+                <option value="snare">
+                  スネア
+                </option>
+
+                <option value="hihat">
+                  ハイハット
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================
+             QUICK GUIDE
+        ================================== -->
+
+        <section class="panel quick-panel">
+
+          <div class="section-head">
+
+            <div>
+
+              <div class="eyebrow">
+                QUICK GUIDE
+              </div>
+
+              <h2>
+                入力に必要な知識
+              </h2>
+
+              <p>
+                分からない記号は、
+                いつでも一覧で確認できます。
+              </p>
+
+            </div>
+
+
+            <button
+              id="open-reference"
+              class="text-link"
+              type="button"
+            >
+              音符・記号一覧 →
+            </button>
+
+          </div>
+
+
+          <div
+            class="quick-cards"
+            aria-label="音符クイックガイド"
+          >
+
+            <button type="button">
+
+              <span
+                class="vf-icon"
+                data-icon-kind="note"
+                data-duration="quarter"
+                aria-hidden="true"
+              ></span>
+
+              <b>
+                4分音符
+              </b>
+
+              <small>
+                1拍
+              </small>
+
+            </button>
+
+
+            <button type="button">
+
+              <span
+                class="vf-icon"
+                data-icon-kind="note"
+                data-duration="eighth"
+                aria-hidden="true"
+              ></span>
+
+              <b>
+                8分音符
+              </b>
+
+              <small>
+                1/2拍
+              </small>
+
+            </button>
+
+
+            <button type="button">
+
+              <span
+                class="vf-icon"
+                data-icon-kind="note"
+                data-duration="sixteenth"
+                aria-hidden="true"
+              ></span>
+
+              <b>
+                16分音符
+              </b>
+
+              <small>
+                1/4拍
+              </small>
+
+            </button>
+
+
+            <button type="button">
+
+              <span
+                class="vf-icon"
+                data-icon-kind="rest"
+                data-duration="quarter"
+                aria-hidden="true"
+              ></span>
+
+              <b>
+                4分休符
+              </b>
+
+              <small>
+                1拍休む
+              </small>
+
+            </button>
+
+
+            <button type="button">
+
+              <span
+                class="symbol-preview"
+                aria-hidden="true"
+              >
+                •
+              </span>
+
+              <b>
+                付点
+              </b>
+
+              <small>
+                長さを1.5倍
+              </small>
+
+            </button>
+
+
+            <button type="button">
+
+              <span
+                class="symbol-preview"
+                aria-hidden="true"
+              >
+                ♫
+              </span>
+
+              <b>
+                連桁
+              </b>
+
+              <small>
+                拍のまとまり
+              </small>
+
+            </button>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================
+             SCORE
+        ================================== -->
+
+        <section
+          id="score-panel"
+          class="panel score-panel"
+        >
+
+          <div class="section-head score-head">
+
+            <div>
+
+              <div class="eyebrow">
+                YOUR RHYTHM
+              </div>
+
+              <h2>
+                譜面
+              </h2>
+
+              <p id="measure-status">
+                1小節目：残り4拍
+              </p>
+
+            </div>
+
+
+            <div class="score-actions">
+
+              <button
+                id="input-edit-toggle"
+                class="edit-toggle-button"
+                type="button"
+                aria-expanded="false"
+              >
+                <span id="input-edit-label">
+                  入力・編集
+                </span>
+              </button>
+
+
+              <button
+                id="undo"
+                class="soft-button"
+                type="button"
+                disabled
+              >
+                ↶ 元に戻す
+              </button>
+
+
+              <button
+                id="redo"
+                class="soft-button"
+                type="button"
+                disabled
+              >
+                ↷ やり直す
+              </button>
+
+
+              <button
+                id="clear-score"
+                class="soft-button danger"
+                type="button"
+              >
+                譜面をクリア
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="score-sticky">
+
+            <div
+              id="score-scroll"
+              class="score-scroll"
+            >
+
+              <div class="score-track">
+
+                <div
+                  class="measure-labels"
+                  aria-hidden="true"
+                >
+
+                  <span>
+                    1小節目
+                  </span>
+
+                  <span>
+                    2小節目
+                  </span>
+
+                </div>
+
+
+                <div
+                  id="score-shell"
+                  class="score-shell"
+                >
+
+                  <div id="score-render"></div>
+
+                  <div
+                    id="score-hit-layer"
+                    class="score-hit-layer"
+                  ></div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================
+               INPUT
+          ================================== -->
+
+          <div
+            id="editor-tray"
+            class="editor-tray is-hidden"
+          >
+
+            <div class="editor-tray-head">
+
+              <div>
+
+                <strong>
+                  譜面に追加
+                </strong>
+
+                <p>
+                  音符・休符を選ぶと、
+                  譜面の最後に追加されます。
+                </p>
+
+              </div>
+
+
+              <button
+                id="finish-edit"
+                class="finish-edit-button"
+                type="button"
+              >
+                完了
+              </button>
+
+            </div>
+
+
+            <div
+              class="input-tabs"
+              role="tablist"
+              aria-label="入力カテゴリ"
+            >
+
+              <button
+                class="input-tab is-active"
+                data-input-tab="notes"
+                type="button"
+              >
+                音符
+              </button>
+
+              <button
+                class="input-tab"
+                data-input-tab="rests"
+                type="button"
+              >
+                休符
+              </button>
+
+              <button
+                class="input-tab"
+                data-input-tab="symbols"
+                type="button"
+              >
+                その他の記号
+              </button>
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            <div
+              class="palette"
+              data-panel="notes"
+            >
+
+              <button
+                class="notation-button"
+                data-kind="note"
+                data-duration="whole"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="note"
+                  data-duration="whole"
+                ></span>
+
+                <b>
+                  全音符
+                </b>
+
+                <small>
+                  4拍
+                </small>
+
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-kind="note"
+                data-duration="half"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="note"
+                  data-duration="half"
+                ></span>
+
+                <b>
+                  2分音符
+                </b>
+
+                <small>
+                  2拍
+                </small>
+
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-kind="note"
+                data-duration="quarter"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="note"
+                  data-duration="quarter"
+                ></span>
+
+                <b>
+                  4分音符
+                </b>
+
+                <small>
+                  1拍
+                </small>
+
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-kind="note"
+                data-duration="eighth"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="note"
+                  data-duration="eighth"
+                ></span>
+
+                <b>
+                  8分音符
+                </b>
+
+                <small>
+                  1/2拍
+                </small>
+
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-kind="note"
+                data-duration="sixteenth"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="note"
+                  data-duration="sixteenth"
+                ></span>
+
+                <b>
+                  16分音符
+                </b>
+
+                <small>
+                  1/4拍
+                </small>
+
+              </button>
+
+            </div>
+
+
+            <!-- RESTS -->
+
+            <div
+              class="palette is-hidden"
+              data-panel="rests"
+            >
+
+              <button
+                class="notation-button"
+                data-kind="rest"
+                data-duration="whole"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="rest"
+                  data-duration="whole"
+                ></span>
+
+                <b>
+                  全休符
+                </b>
+
+                <small>
+                  4拍
+                </small>
+
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-kind="rest"
+                data-duration="half"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="rest"
+                  data-duration="half"
+                ></span>
+
+                <b>
+                  2分休符
+                </b>
+
+                <small>
+                  2拍
+                </small>
+
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-kind="rest"
+                data-duration="quarter"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="rest"
+                  data-duration="quarter"
+                ></span>
+
+                <b>
+                  4分休符
+                </b>
+
+                <small>
+                  1拍
+                </small>
+
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-kind="rest"
+                data-duration="eighth"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="rest"
+                  data-duration="eighth"
+                ></span>
+
+                <b>
+                  8分休符
+                </b>
+
+                <small>
+                  1/2拍
+                </small>
+
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-kind="rest"
+                data-duration="sixteenth"
+                type="button"
+              >
+                <span
+                  class="vf-icon"
+                  data-icon-kind="rest"
+                  data-duration="sixteenth"
+                ></span>
+
+                <b>
+                  16分休符
+                </b>
+
+                <small>
+                  1/4拍
+                </small>
+
+              </button>
+
+            </div>
+
+
+            <!-- SYMBOLS -->
+
+            <div
+              class="palette symbol-palette is-hidden"
+              data-panel="symbols"
+            >
+
+              <button
+                class="notation-button"
+                data-symbol="dot"
+                type="button"
+              >
+                <span class="symbol-preview">
+                  •
+                </span>
+
+                <b>
+                  付点
+                </b>
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-symbol="tie"
+                type="button"
+              >
+                <span class="symbol-preview">
+                  ⌒
+                </span>
+
+                <b>
+                  タイ
+                </b>
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-symbol="slur"
+                type="button"
+              >
+                <span class="symbol-preview">
+                  ⏜
+                </span>
+
+                <b>
+                  スラー
+                </b>
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-symbol="triplet"
+                type="button"
+              >
+                <span class="symbol-preview tuplet">
+                  3
+                </span>
+
+                <b>
+                  3連符
+                </b>
+              </button>
+
+
+              <button
+                class="notation-button"
+                data-symbol="quintuplet"
+                type="button"
+              >
+                <span class="symbol-preview tuplet">
+                  5
+                </span>
+
+                <b>
+                  5連符
+                </b>
+              </button>
+
+            </div>
+
+
+            <p
+              id="mode-help"
+              class="mode-help"
+            >
+              音符または休符を選ぶと、
+              譜面の最後に追加されます。
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================
+             PLAYBACK
+        ================================== -->
+
+        <section
+          class="panel playback-panel"
+          aria-label="再生コントロール"
+        >
+
+          <div class="playback-left">
+
+            <button
+              id="play-toggle"
+              class="play-button"
+              type="button"
+              aria-label="再生"
+            >
+
+              <span id="play-icon">
+                ▶
+              </span>
+
+              <span id="play-label">
+                再生
+              </span>
+
+            </button>
+
+
+            <button
+              id="restart"
+              class="playback-button"
+              type="button"
+            >
+              ↺ 先頭へ
+            </button>
+
+
+            <button
+              id="loop-toggle"
+              class="playback-button"
+              type="button"
+              aria-pressed="false"
+            >
+              ↻ ループ
+            </button>
+
+          </div>
+
+
+          <div class="speed-control">
+
+            <span>
+              再生速度
+            </span>
+
+            <div
+              class="speed-buttons"
+              role="group"
+              aria-label="再生速度"
+            >
+
+              <button
+                data-speed="0.5"
+                type="button"
+              >
+                50%
+              </button>
+
+              <button
+                data-speed="0.75"
+                type="button"
+              >
+                75%
+              </button>
+
+              <button
+                class="is-active"
+                data-speed="1"
+                type="button"
+              >
+                100%
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </section>
+
+
+      <!-- =====================================
+           REFERENCE VIEW
+      ====================================== -->
+
+      <section
+        id="reference-view"
+        class="view is-hidden"
+      >
+
+        <section class="reference-page">
+
+          <!-- HEADER -->
+
+          <div class="reference-page-head">
+
+            <div>
+
+              <div class="eyebrow">
+                RHYTHM LIBRARY
+              </div>
+
+              <h2>
+                音符・記号一覧
+              </h2>
+
+              <p>
+                気になる記号をタップすると、
+                意味やリズムを詳しく確認できます。
+              </p>
+
+            </div>
+
+
+            <button
+              id="back-editor"
+              class="reference-back-button"
+              type="button"
+            >
+              ← 譜面入力へ
+            </button>
+
+          </div>
+
+
+          <!-- FILTER -->
+
+          <div
+            class="reference-category-tabs"
+            role="group"
+            aria-label="カテゴリ"
+          >
+
+            <button
+              class="reference-filter is-active"
+              data-reference-filter="all"
+              type="button"
+            >
+              すべて
+            </button>
+
+            <button
+              class="reference-filter"
+              data-reference-filter="notes"
+              type="button"
+            >
+              音符
+            </button>
+
+            <button
+              class="reference-filter"
+              data-reference-filter="rests"
+              type="button"
+            >
+              休符
+            </button>
+
+            <button
+              class="reference-filter"
+              data-reference-filter="symbols"
+              type="button"
+            >
+              記号
+            </button>
+
+            <button
+              class="reference-filter"
+              data-reference-filter="tuplets"
+              type="button"
+            >
+              連符
+            </button>
+
+          </div>
+
+
+          <div
+            id="reference-grid"
+            class="reference-icon-grid"
+          ></div>
+
+        </section>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- =====================================
+       REFERENCE DETAIL
+  ====================================== -->
+
+  <dialog
+    id="reference-detail-dialog"
+    class="reference-detail-dialog"
+  >
+
+    <div class="reference-detail-shell">
+
+      <div class="reference-detail-head">
+
+        <span
+          id="reference-detail-category"
+          class="reference-detail-category"
+        >
+          NOTE
+        </span>
+
+
+        <button
+          id="reference-detail-close"
+          class="reference-detail-close"
+          type="button"
+          aria-label="閉じる"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="reference-detail-main">
+
+        <!-- BIG SYMBOL -->
+
+        <div
+          id="reference-detail-preview"
+          class="reference-detail-preview"
+        ></div>
+
+
+        <!-- TITLE -->
+
+        <div class="reference-detail-title">
+
+          <h2 id="reference-detail-name">
+            4分音符
+          </h2>
+
+          <span
+            id="reference-detail-value"
+            class="reference-detail-value"
+          >
+            1拍
+          </span>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <p
+          id="reference-detail-summary"
+          class="reference-detail-summary"
+        >
+          ここに説明が入ります。
+        </p>
+
+
+        <!-- STANDARD / TAB -->
+
+        <div class="reference-detail-compare">
+
+          <div class="reference-detail-block">
+
+            <span class="reference-detail-label">
+              STANDARD
+            </span>
+
+            <strong>
+              標準譜
+            </strong>
+
+            <div
+              id="reference-detail-standard"
+              class="reference-detail-standard"
+            ></div>
+
+          </div>
+
+
+          <div class="reference-detail-block">
+
+            <span class="reference-detail-label">
+              TAB
+            </span>
+
+            <strong>
+              TABで見ると
+            </strong>
+
+            <p
+              id="reference-detail-tab-label"
+              class="reference-detail-tab-label"
+            ></p>
+
+
+            <div class="reference-detail-tab">
+
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+
+              <b id="reference-detail-tab-rhythm"></b>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- TIP -->
+
+        <div
+          id="reference-detail-tip"
+          class="reference-detail-tip"
+        ></div>
+
+
+        <!-- PLAY -->
+
+        <button
+          id="reference-detail-play"
+          class="reference-detail-play"
+          type="button"
+        >
+
+          <span>
+            ▶
+          </span>
+
+          <b>
+            音で確認
+          </b>
+
+          <small>
+            BPM 90
+          </small>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </dialog>
+
+
+  <!-- =====================================
+       TOAST
+  ====================================== -->
+
+  <div
+    id="toast"
+    class="toast is-hidden"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+  <!-- =====================================
+       TUTORIAL
+  ====================================== -->
+
+  <dialog
+    id="tutorial-dialog"
+    class="dialog"
+  >
+
+    <div class="tutorial-head">
+
+      <div>
+
+        <div class="eyebrow">
+          HOW TO USE
+        </div>
+
+        <h2>
+          HIKERUの使い方
+        </h2>
+
+      </div>
+
+
+      <button
+        id="tutorial-close"
+        class="dialog-close"
+        type="button"
+        aria-label="閉じる"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <ol class="tutorial-list">
+
+      <li>
+
+        <b>
+          1
+        </b>
+
+        <span>
+
+          <strong>
+            入力・編集を開く
+          </strong>
+
+          <small>
+            譜面のすぐ下に入力ボタンが表示されます。
+          </small>
+
+        </span>
+
+      </li>
+
+
+      <li>
+
+        <b>
+          2
+        </b>
+
+        <span>
+
+          <strong>
+            音符や休符を選ぶ
+          </strong>
+
+          <small>
+            選んだ記号が譜面の最後に追加されます。
+          </small>
+
+        </span>
+
+      </li>
+
+
+      <li>
+
+        <b>
+          3
+        </b>
+
+        <span>
+
+          <strong>
+            音で確認する
+          </strong>
+
+          <small>
+            再生するとリズムを実際に聴くことができます。
+          </small>
+
+        </span>
+
+      </li>
+
+    </ol>
+
+
+    <label class="tutorial-hide">
+
+      <input
+        id="tutorial-hide"
+        type="checkbox"
+      >
+
+      次回から表示しない
+
+    </label>
+
+
+    <button
+      id="tutorial-start"
+      class="play-button tutorial-start"
+      type="button"
+    >
+      HIKERUを使う
+    </button>
+
+  </dialog>
+
+
+  <!-- =====================================
+       CLEAR
+  ====================================== -->
+
+  <dialog
+    id="clear-dialog"
+    class="dialog"
+  >
+
+    <h2>
+      譜面をクリアしますか？
+    </h2>
+
+    <p>
+      入力した譜面をすべて削除します。
+      この操作は元に戻せません。
+    </p>
+
+
+    <div class="dialog-actions">
+
+      <button
+        id="clear-cancel"
+        class="soft-button"
+        type="button"
+      >
+        キャンセル
+      </button>
+
+      <button
+        id="clear-confirm"
+        class="soft-button danger"
+        type="button"
+      >
+        クリア
+      </button>
+
+    </div>
+
+  </dialog>
+
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"
+  ></script>
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
