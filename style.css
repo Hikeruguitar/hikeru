@@ -3596,6 +3596,20 @@ html.is-touch-ui .tab-string-buttons button {
     -webkit-backdrop-filter: blur(8px);
   }
 
+  html.is-fret-input-focused
+  .score-panel.is-editing .score-sticky,
+  html.is-fret-input-focused
+  .input-tabs {
+    position: static;
+  }
+
+  html.is-fret-input-focused
+  .tab-fret-row input,
+  html.is-fret-input-focused
+  .item-edit-fret-field input {
+    scroll-margin-block: 12px;
+  }
+
   .score-panel.is-editing .score-scroll {
     margin-inline: 0;
     padding-inline: 0;
