@@ -2939,10 +2939,6 @@ input:checked
   }
 
 
-  /* =====================================
-     REFERENCE MOBILE
-  ====================================== */
-
   .reference-page {
     padding:
       20px 13px;
@@ -3041,10 +3037,6 @@ input:checked
     font-size: 46px;
   }
 
-
-  /* =====================================
-     DETAIL MOBILE
-  ====================================== */
 
   .reference-detail-dialog {
     width:
@@ -3224,9 +3216,9 @@ input:checked
 
 }
 
+
 /* =========================================================
    Ver.0.2 TAB VIEW
-   Existing HIKERU styles above are unchanged.
 ========================================================= */
 
 .score-title-row {
@@ -3282,7 +3274,6 @@ input:checked
   line-height: 1.7;
 }
 
-/* TAB編集時だけ譜面を上部に残す。通常の五線譜編集には影響させない。 */
 .score-panel.is-tab-view.is-editing .score-sticky {
   position: sticky;
   top: 8px;
@@ -3293,7 +3284,6 @@ input:checked
   box-shadow: 0 10px 24px rgba(31, 43, 54, 0.10);
 }
 
-/* TAB表示中の入力アイコン。SVG自体はapp.jsでTAB譜本体と同じ描画処理を使う。 */
 .score-panel.is-tab-view .vf-icon {
   width: 112px;
   height: 74px;
@@ -3309,6 +3299,7 @@ input:checked
 .score-panel.is-tab-view .notation-button[data-kind="note"] b {
   margin-top: 1px;
 }
+
 
 /* =========================================================
    TAB INPUT / ITEM EDIT
@@ -3474,6 +3465,7 @@ input:checked
   filter: brightness(0.98);
 }
 
+
 /* =========================================================
    TAB RHYTHM MANUAL
 ========================================================= */
@@ -3528,5 +3520,156 @@ input:checked
 
   .tab-fret-row input {
     width: 100%;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE OPTIMIZATION
+========================================================= */
+
+html.is-touch-ui button,
+html.is-touch-ui select,
+html.is-touch-ui input {
+  touch-action: manipulation;
+}
+
+html.is-touch-ui .view-tab,
+html.is-touch-ui .help-button,
+html.is-touch-ui .soft-button,
+html.is-touch-ui .edit-toggle-button,
+html.is-touch-ui .score-view-toggle,
+html.is-touch-ui .finish-edit-button,
+html.is-touch-ui .tab-primary-button,
+html.is-touch-ui .tab-secondary-button,
+html.is-touch-ui .tab-danger-button {
+  min-height: 44px;
+}
+
+html.is-touch-ui .notation-button,
+html.is-touch-ui .quick-cards button,
+html.is-touch-ui .tab-string-buttons button {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    width: min(100% - 20px, 1160px);
+  }
+
+  .score-panel {
+    overflow: visible;
+  }
+
+  .score-scroll {
+    margin-inline: -4px;
+    padding-inline: 4px;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  .score-track {
+    width: 880px;
+    min-width: 880px;
+  }
+
+  .score-shell {
+    height: 185px;
+  }
+
+  .score-panel.is-editing .score-sticky {
+    position: sticky;
+    top: max(4px, env(safe-area-inset-top));
+    z-index: 20;
+    margin-inline: -6px;
+    padding: 6px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 10px 24px rgba(31, 43, 54, 0.10);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .score-panel.is-editing .score-scroll {
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .editor-tray {
+    scroll-margin-top: 205px;
+  }
+
+  .editor-tray-head {
+    align-items: center;
+  }
+
+  .input-tabs {
+    position: sticky;
+    top: calc(196px + env(safe-area-inset-top));
+    z-index: 12;
+    background: #ffffff;
+    padding-block: 5px;
+  }
+
+  .palette {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  .notation-button {
+    scroll-snap-align: start;
+  }
+
+  .tab-sub-editor {
+    padding: 14px;
+  }
+
+  .tab-string-buttons button {
+    min-height: 48px;
+    font-size: 11px;
+  }
+
+  .tab-fret-row input,
+  .item-edit-grid input,
+  .item-edit-grid select {
+    min-height: 46px;
+    font-size: 16px;
+  }
+
+  .tab-sub-editor-actions > button {
+    flex: 1 1 130px;
+  }
+}
+
+@media (max-width: 480px) {
+  .score-actions {
+    gap: 6px;
+  }
+
+  .score-actions .soft-button {
+    flex: 1 1 auto;
+  }
+
+  .editor-tray-head p {
+    max-width: 230px;
+  }
+
+  .tab-string-buttons {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) and (pointer: coarse) {
+  .score-panel.is-editing .score-sticky {
+    position: static;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .input-tabs {
+    position: static;
   }
 }
