@@ -10974,9 +10974,6 @@ function getFocusedFretInput() {
   if (
     activeElement
       === dom.tabFretInput
-    ||
-    activeElement
-      === dom.itemEditFret
   ) {
     return activeElement;
   }
@@ -13239,24 +13236,16 @@ function bindTabEvents() {
       }
     );
 
-  [
-    dom.tabFretInput,
-    dom.itemEditFret
-  ]
-    .forEach(
-      input => {
-        input
-          ?.addEventListener(
-            "focus",
-            handleFretInputFocus
-          );
+  dom.tabFretInput
+    ?.addEventListener(
+      "focus",
+      handleFretInputFocus
+    );
 
-        input
-          ?.addEventListener(
-            "blur",
-            handleFretInputBlur
-          );
-      }
+  dom.tabFretInput
+    ?.addEventListener(
+      "blur",
+      handleFretInputBlur
     );
 
   window.visualViewport
