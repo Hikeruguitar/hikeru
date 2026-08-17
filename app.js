@@ -10967,6 +10967,135 @@ function getTabEditItem() {
 }
 
 
+function getFocusedFretInput() {
+  const activeElement =
+    document.activeElement;
+
+  if (
+    activeElement
+      === dom.tabFretInput
+    ||
+    activeElement
+      === dom.itemEditFret
+  ) {
+    return activeElement;
+  }
+
+  return null;
+}
+
+
+function revealFocusedFretInput() {
+  if (
+    !document.documentElement
+      .classList.contains(
+        "is-fret-input-focused"
+      )
+  ) {
+    return;
+  }
+
+  const input =
+    getFocusedFretInput();
+
+  if (!input) {
+    return;
+  }
+
+  const rect =
+    input.getBoundingClientRect();
+
+  const viewport =
+    window.visualViewport;
+
+  const viewportTop =
+    viewport?.offsetTop
+    ||
+    0;
+
+  const viewportHeight =
+    viewport?.height
+    ||
+    window.innerHeight;
+
+  const availableHeight =
+    Math.max(
+      0,
+      viewportHeight - 24
+    );
+
+  const desiredTop =
+    viewportTop
+    + 12
+    + Math.max(
+        0,
+        (
+          availableHeight
+          - rect.height
+        )
+        / 2
+      );
+
+  window.scrollTo({
+    top:
+      Math.max(
+        0,
+        window.scrollY
+        + rect.top
+        - desiredTop
+      ),
+
+    left:
+      window.scrollX,
+
+    behavior:
+      "auto"
+  });
+}
+
+
+function handleFretInputFocus() {
+  if (
+    !window.matchMedia(
+      "(max-width: 760px)"
+    ).matches
+  ) {
+    return;
+  }
+
+  document.documentElement
+    .classList.add(
+      "is-fret-input-focused"
+    );
+
+  requestAnimationFrame(
+    revealFocusedFretInput
+  );
+
+  window.setTimeout(
+    revealFocusedFretInput,
+    350
+  );
+}
+
+
+function handleFretInputBlur() {
+  window.setTimeout(
+    () => {
+      if (getFocusedFretInput()) {
+        return;
+      }
+
+      document.documentElement
+        .classList.remove(
+          "is-fret-input-focused"
+        );
+    },
+    0
+  );
+}
+
+
 function startTabInput() {
   const first =
     getFirstUnfilledTabNote();
@@ -13097,6 +13226,32 @@ function bindTabEvents() {
           confirmTabFret();
         }
       }
+    );
+
+  [
+    dom.tabFretInput,
+    dom.itemEditFret
+  ]
+    .forEach(
+      input => {
+        input
+          ?.addEventListener(
+            "focus",
+            handleFretInputFocus
+          );
+
+        input
+          ?.addEventListener(
+            "blur",
+            handleFretInputBlur
+          );
+      }
+    );
+
+  window.visualViewport
+    ?.addEventListener(
+      "resize",
+      revealFocusedFretInput
     );
 
   dom.tabInputCancel
