@@ -11018,31 +11018,42 @@ function revealFocusedFretInput() {
     ||
     window.innerHeight;
 
-  const availableHeight =
-    Math.max(
-      0,
-      viewportHeight - 24
-    );
-
-  const desiredTop =
+  const visibleTop =
     viewportTop
-    + 12
-    + Math.max(
-        0,
-        (
-          availableHeight
-          - rect.height
-        )
-        / 2
-      );
+    + 12;
+
+  const visibleBottom =
+    viewportTop
+    + viewportHeight
+    - 12;
+
+  let scrollDelta = 0;
+
+  if (rect.top < visibleTop) {
+    scrollDelta =
+      rect.top
+      - visibleTop;
+  }
+
+  else if (
+    rect.bottom
+      > visibleBottom
+  ) {
+    scrollDelta =
+      rect.bottom
+      - visibleBottom;
+  }
+
+  if (!scrollDelta) {
+    return;
+  }
 
   window.scrollTo({
     top:
       Math.max(
         0,
         window.scrollY
-        + rect.top
-        - desiredTop
+        + scrollDelta
       ),
 
     left:
