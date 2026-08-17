@@ -3578,6 +3578,11 @@ html.is-touch-ui .tab-string-buttons button {
     height: 185px;
   }
 
+  .score-panel.is-tab-view
+  .score-shell {
+    height: 220px;
+  }
+
   .score-panel.is-editing .score-sticky {
     position: sticky;
     top: max(4px, env(safe-area-inset-top));

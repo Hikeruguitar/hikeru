@@ -127,6 +127,7 @@ let idCounter = 0;
 let toastTimer = null;
 let referenceAuditionTimer = null;
 let activeScoreEditItemId = null;
+let storageWarningShown = false;
 
 const dom = {
   bpm: document.getElementById("bpm"),
@@ -1464,8 +1465,63 @@ function normalizeScore(candidate) {
 }
 
 
+function showStorageWarning(error) {
+  console.warn(
+    "KIKUtab: 保存領域を利用できません。",
+    error
+  );
+
+  if (storageWarningShown) {
+    return;
+  }
+
+  storageWarningShown = true;
+
+  window.setTimeout(
+    () =>
+      showToast(
+        "この端末では譜面を保存できません。",
+        3500
+      ),
+    0
+  );
+}
+
+
+function readStorageItem(key) {
+  try {
+    return localStorage.getItem(key);
+  }
+
+  catch (error) {
+    showStorageWarning(error);
+    return null;
+  }
+}
+
+
+function writeStorageItem(
+  key,
+  value
+) {
+  try {
+    localStorage.setItem(
+      key,
+      value
+    );
+
+    return true;
+  }
+
+  catch (error) {
+    showStorageWarning(error);
+    return false;
+  }
+}
+
+
 function saveState() {
-  localStorage.setItem(
+  return writeStorageItem(
     CONFIG.storageKey,
 
     JSON.stringify({
@@ -1482,28 +1538,7 @@ function saveState() {
 }
 
 
-function restoreState() {
-  const currentRaw =
-    localStorage.getItem(
-      CONFIG.storageKey
-    );
-
-  const legacyRaw =
-    currentRaw
-      ? null
-      : localStorage.getItem(
-          CONFIG.legacyStorageKey
-        );
-
-  const raw =
-    currentRaw
-    ||
-    legacyRaw;
-
-  if (!raw) {
-    return false;
-  }
-
+function parseSavedState(raw) {
   try {
     const saved =
       JSON.parse(raw);
@@ -1521,22 +1556,86 @@ function restoreState() {
     const normalized =
       normalizeScore(candidate);
 
-    if (normalized) {
-      state.score =
-        normalized;
+    if (!normalized) {
+      return null;
     }
 
-    state.bpm =
-      clampBpm(
-        Number(saved.bpm)
-        || 120
+    return {
+      score:
+        normalized,
+
+      bpm:
+        clampBpm(
+          Number(saved.bpm)
+          || 120
+        )
+    };
+  }
+
+  catch (error) {
+    console.warn(
+      "KIKUtab: 保存データを読み込めませんでした。",
+      error
+    );
+
+    return false;
+  }
+}
+
+
+function restoreState() {
+  const currentRaw =
+    readStorageItem(
+      CONFIG.storageKey
+    );
+
+  const legacyRaw =
+    readStorageItem(
+      CONFIG.legacyStorageKey
+    );
+
+  const candidates = [
+    {
+      raw:
+        currentRaw,
+
+      legacy:
+        false
+    },
+
+    {
+      raw:
+        legacyRaw,
+
+      legacy:
+        true
+    }
+  ];
+
+  for (
+    const candidate
+    of candidates
+  ) {
+    if (!candidate.raw) {
+      continue;
+    }
+
+    const restored =
+      parseSavedState(
+        candidate.raw
       );
 
-    if (
-      !currentRaw
-      &&
-      legacyRaw
-    ) {
+    if (!restored) {
+      continue;
+    }
+
+    state.score =
+      restored.score;
+
+    state.bpm =
+      restored.bpm;
+
+    if (candidate.legacy) {
       saveState();
     }
 
@@ -1548,14 +1647,7 @@ function restoreState() {
       );
   }
 
-  catch (error) {
-    console.warn(
-      "KIKUtab: 保存データを読み込めませんでした。",
-      error
-    );
-
-    return false;
-  }
+  return false;
 }
 
 
@@ -8301,7 +8393,7 @@ function bindEvents() {
         if (
           dom.tutorialHide.checked
         ) {
-          localStorage.setItem(
+          writeStorageItem(
             CONFIG.tutorialKey,
             "1"
           );
@@ -13259,28 +13351,28 @@ function start() {
   }
 
   const hideTutorial =
-    localStorage.getItem(
+    readStorageItem(
       CONFIG.tutorialKey
     )
       === "1"
     ||
-    localStorage.getItem(
+    readStorageItem(
       CONFIG.legacyTutorialKey
     )
       === "1";
 
   if (
-    localStorage.getItem(
+    readStorageItem(
       CONFIG.tutorialKey
     )
       !== "1"
     &&
-    localStorage.getItem(
+    readStorageItem(
       CONFIG.legacyTutorialKey
     )
       === "1"
   ) {
-    localStorage.setItem(
+    writeStorageItem(
       CONFIG.tutorialKey,
       "1"
     );
