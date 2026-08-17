@@ -22,6 +22,7 @@
   >
 </head>
 
+
 <body>
 
   <div class="app-shell">
@@ -95,6 +96,7 @@
     </header>
 
 
+
     <main>
 
       <!-- =====================================
@@ -128,6 +130,7 @@
             </p>
 
           </div>
+
 
 
           <!-- =================================
@@ -259,6 +262,7 @@
         </section>
 
 
+
         <!-- =================================
              QUICK GUIDE
         ================================== -->
@@ -384,11 +388,12 @@
             <button type="button">
 
               <span
-                class="symbol-preview"
+                class="vf-icon"
+                data-icon-kind="note"
+                data-duration="quarter"
+                data-dotted="true"
                 aria-hidden="true"
-              >
-                •
-              </span>
+              ></span>
 
               <b>
                 付点
@@ -425,6 +430,7 @@
         </section>
 
 
+
         <!-- =================================
              SCORE
         ================================== -->
@@ -442,9 +448,20 @@
                 YOUR RHYTHM
               </div>
 
-              <h2>
-                譜面
-              </h2>
+              <div class="score-title-row">
+                <h2 id="score-view-title">
+                  五線譜
+                </h2>
+
+                <button
+                  id="score-view-toggle"
+                  class="score-view-toggle"
+                  type="button"
+                  aria-pressed="false"
+                >
+                  TAB譜に切り替え
+                </button>
+              </div>
 
               <p id="measure-status">
                 1小節目：残り4拍
@@ -500,6 +517,7 @@
           </div>
 
 
+
           <div class="score-sticky">
 
             <div
@@ -532,6 +550,14 @@
 
                   <div id="score-render"></div>
 
+                  <svg
+                    id="tab-score-render"
+                    class="tab-score-render is-hidden"
+                    viewBox="0 0 880 220"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-label="TAB譜"
+                  ></svg>
+
                   <div
                     id="score-hit-layer"
                     class="score-hit-layer"
@@ -544,6 +570,14 @@
             </div>
 
           </div>
+
+          <p
+            id="tab-score-note"
+            class="tab-score-note is-hidden"
+          >
+            まずリズムだけ入力できます。○をタップすると、左から順番に「弦 → フレット」を入力します。
+          </p>
+
 
 
           <!-- =================================
@@ -615,7 +649,6 @@
             </div>
 
 
-            <!-- NOTES -->
 
             <div
               class="palette"
@@ -641,7 +674,6 @@
                 <small>
                   4拍
                 </small>
-
               </button>
 
 
@@ -664,7 +696,6 @@
                 <small>
                   2拍
                 </small>
-
               </button>
 
 
@@ -687,7 +718,6 @@
                 <small>
                   1拍
                 </small>
-
               </button>
 
 
@@ -710,7 +740,6 @@
                 <small>
                   1/2拍
                 </small>
-
               </button>
 
 
@@ -733,13 +762,11 @@
                 <small>
                   1/4拍
                 </small>
-
               </button>
 
             </div>
 
 
-            <!-- RESTS -->
 
             <div
               class="palette is-hidden"
@@ -765,7 +792,6 @@
                 <small>
                   4拍
                 </small>
-
               </button>
 
 
@@ -788,7 +814,6 @@
                 <small>
                   2拍
                 </small>
-
               </button>
 
 
@@ -811,7 +836,6 @@
                 <small>
                   1拍
                 </small>
-
               </button>
 
 
@@ -834,7 +858,6 @@
                 <small>
                   1/2拍
                 </small>
-
               </button>
 
 
@@ -857,13 +880,11 @@
                 <small>
                   1/4拍
                 </small>
-
               </button>
 
             </div>
 
 
-            <!-- SYMBOLS -->
 
             <div
               class="palette symbol-palette is-hidden"
@@ -920,9 +941,11 @@
                 data-symbol="triplet"
                 type="button"
               >
-                <span class="symbol-preview tuplet">
-                  3
-                </span>
+                <span
+                  class="tuplet-input-icon"
+                  data-tuplet-icon="triplet"
+                  aria-hidden="true"
+                ></span>
 
                 <b>
                   3連符
@@ -935,9 +958,11 @@
                 data-symbol="quintuplet"
                 type="button"
               >
-                <span class="symbol-preview tuplet">
-                  5
-                </span>
+                <span
+                  class="tuplet-input-icon"
+                  data-tuplet-icon="quintuplet"
+                  aria-hidden="true"
+                ></span>
 
                 <b>
                   5連符
@@ -955,9 +980,194 @@
               譜面の最後に追加されます。
             </p>
 
+            <section
+              id="tab-input-panel"
+              class="tab-sub-editor is-hidden"
+              aria-label="TAB情報入力"
+            >
+              <h3>TAB情報を入力</h3>
+
+              <p
+                id="tab-input-progress"
+                class="tab-input-progress"
+              ></p>
+
+              <div
+                id="tab-string-step"
+                class="tab-input-step"
+              >
+                <strong>1. 弦を選ぶ</strong>
+
+                <div
+                  class="tab-string-buttons"
+                  aria-label="弦を選択"
+                >
+                  <button type="button" data-tab-string="1">1弦</button>
+                  <button type="button" data-tab-string="2">2弦</button>
+                  <button type="button" data-tab-string="3">3弦</button>
+                  <button type="button" data-tab-string="4">4弦</button>
+                  <button type="button" data-tab-string="5">5弦</button>
+                  <button type="button" data-tab-string="6">6弦</button>
+                </div>
+              </div>
+
+              <div
+                id="tab-fret-step"
+                class="tab-input-step is-hidden"
+              >
+                <strong>2. フレット番号を入力</strong>
+
+                <div class="tab-fret-row">
+                  <input
+                    id="tab-fret-input"
+                    type="number"
+                    min="0"
+                    max="24"
+                    inputmode="numeric"
+                    placeholder="例：3"
+                  >
+
+                  <button
+                    id="tab-fret-confirm"
+                    class="tab-primary-button"
+                    type="button"
+                  >
+                    決定
+                  </button>
+                </div>
+              </div>
+
+              <div class="tab-sub-editor-actions">
+                <button
+                  id="tab-input-cancel"
+                  class="tab-secondary-button"
+                  type="button"
+                >
+                  TAB入力を終了
+                </button>
+              </div>
+            </section>
+
+            <section
+              id="item-edit-panel"
+              class="tab-sub-editor is-hidden"
+              aria-label="音符編集"
+            >
+              <h3>選択した音を編集</h3>
+
+              <p
+                id="item-edit-current"
+                class="tab-input-progress"
+              ></p>
+
+              <div class="item-edit-grid">
+                <label>
+                  <span>種類</span>
+                  <select id="item-edit-kind">
+                    <option value="note">音符</option>
+                    <option value="rest">休符</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>長さ</span>
+                  <select id="item-edit-duration">
+                    <option value="whole">全音符 / 全休符</option>
+                    <option value="half">2分音符 / 2分休符</option>
+                    <option value="quarter">4分音符 / 4分休符</option>
+                    <option value="eighth">8分音符 / 8分休符</option>
+                    <option value="sixteenth">16分音符 / 16分休符</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>付点</span>
+                  <select id="item-edit-dotted">
+                    <option value="no">なし</option>
+                    <option value="yes">あり</option>
+                  </select>
+                </label>
+
+                <label class="item-edit-fret-field">
+                  <span>フレット</span>
+                  <input
+                    id="item-edit-fret"
+                    type="number"
+                    min="0"
+                    max="24"
+                    inputmode="numeric"
+                    placeholder="0〜24"
+                  >
+                </label>
+              </div>
+
+              <div class="item-edit-tab-fields">
+                <strong>弦</strong>
+
+                <div
+                  class="tab-string-buttons"
+                  aria-label="編集する弦を選択"
+                >
+                  <button type="button" data-edit-string="1">1弦</button>
+                  <button type="button" data-edit-string="2">2弦</button>
+                  <button type="button" data-edit-string="3">3弦</button>
+                  <button type="button" data-edit-string="4">4弦</button>
+                  <button type="button" data-edit-string="5">5弦</button>
+                  <button type="button" data-edit-string="6">6弦</button>
+                </div>
+              </div>
+
+              <p class="tab-edit-note">
+                リズムを変更しても弦・フレットは残ります。休符にするとTAB数字は外れます。
+              </p>
+
+              <div class="tab-sub-editor-actions">
+                <button
+                  id="item-edit-apply"
+                  class="tab-primary-button"
+                  type="button"
+                >
+                  変更を反映
+                </button>
+
+                <button
+                  id="item-edit-brush"
+                  class="tab-secondary-button"
+                  type="button"
+                >
+                  ブラッシング切替
+                </button>
+
+                <button
+                  id="item-edit-remove-tab"
+                  class="tab-secondary-button"
+                  type="button"
+                >
+                  TAB数字を消す
+                </button>
+
+                <button
+                  id="item-edit-delete"
+                  class="tab-danger-button"
+                  type="button"
+                >
+                  この音を削除
+                </button>
+
+                <button
+                  id="item-edit-close"
+                  class="tab-secondary-button"
+                  type="button"
+                >
+                  編集を閉じる
+                </button>
+              </div>
+            </section>
+
           </div>
 
         </section>
+
 
 
         <!-- =================================
@@ -1053,6 +1263,7 @@
       </section>
 
 
+
       <!-- =====================================
            REFERENCE VIEW
       ====================================== -->
@@ -1095,6 +1306,7 @@
             </button>
 
           </div>
+
 
 
           <!-- FILTER -->
@@ -1148,6 +1360,17 @@
           </div>
 
 
+
+          <!--
+            ここには
+
+            [ 大きな音符 ]
+              4分音符
+
+            のようなシンプルなアイコンだけを
+            app.js で生成する。
+          -->
+
           <div
             id="reference-grid"
             class="reference-icon-grid"
@@ -1160,6 +1383,7 @@
     </main>
 
   </div>
+
 
 
   <!-- =====================================
@@ -1195,6 +1419,7 @@
       </div>
 
 
+
       <div class="reference-detail-main">
 
         <!-- BIG SYMBOL -->
@@ -1203,6 +1428,7 @@
           id="reference-detail-preview"
           class="reference-detail-preview"
         ></div>
+
 
 
         <!-- TITLE -->
@@ -1223,6 +1449,7 @@
         </div>
 
 
+
         <!-- DESCRIPTION -->
 
         <p
@@ -1231,6 +1458,7 @@
         >
           ここに説明が入ります。
         </p>
+
 
 
         <!-- STANDARD / TAB -->
@@ -1253,6 +1481,7 @@
             ></div>
 
           </div>
+
 
 
           <div class="reference-detail-block">
@@ -1289,12 +1518,14 @@
         </div>
 
 
+
         <!-- TIP -->
 
         <div
           id="reference-detail-tip"
           class="reference-detail-tip"
         ></div>
+
 
 
         <!-- PLAY -->
@@ -1326,6 +1557,7 @@
   </dialog>
 
 
+
   <!-- =====================================
        TOAST
   ====================================== -->
@@ -1336,6 +1568,7 @@
     role="status"
     aria-live="polite"
   ></div>
+
 
 
   <!-- =====================================
@@ -1377,68 +1610,55 @@
     <ol class="tutorial-list">
 
       <li>
-
-        <b>
-          1
-        </b>
-
+        <b>1</b>
         <span>
-
-          <strong>
-            入力・編集を開く
-          </strong>
-
-          <small>
-            譜面のすぐ下に入力ボタンが表示されます。
-          </small>
-
+          <strong>入力・編集を開く</strong>
+          <small>譜面のすぐ下に入力ボタンが表示されます。</small>
         </span>
-
       </li>
 
-
       <li>
-
-        <b>
-          2
-        </b>
-
+        <b>2</b>
         <span>
-
-          <strong>
-            音符や休符を選ぶ
-          </strong>
-
-          <small>
-            選んだ記号が譜面の最後に追加されます。
-          </small>
-
+          <strong>音符や休符を選ぶ</strong>
+          <small>選んだ記号が譜面の最後に追加されます。</small>
         </span>
-
       </li>
 
+      <li>
+        <b>3</b>
+        <span>
+          <strong>五線譜 / TAB譜を切り替える</strong>
+          <small>同じリズムを別の見え方で確認できます。TAB譜でも音のタイミングは同じです。</small>
+        </span>
+      </li>
 
       <li>
-
-        <b>
-          3
-        </b>
-
+        <b>4</b>
         <span>
-
-          <strong>
-            音で確認する
-          </strong>
-
-          <small>
-            再生するとリズムを実際に聴くことができます。
-          </small>
-
+          <strong>音で確認する</strong>
+          <small>再生するとリズムを実際に聴くことができます。TAB情報を入れた音は弦とフレットに応じた高さで鳴ります。</small>
         </span>
-
       </li>
 
     </ol>
+
+    <section class="tab-reading-guide">
+      <div class="eyebrow">TAB RHYTHM GUIDE</div>
+      <h3>TAB譜のリズムの読み方</h3>
+
+      <p class="tab-reading-core">
+        <strong>TAB譜の数字だけでは、弾くタイミングは分かりません。</strong>
+        数字は「どこを押さえるか」、符幹・連桁・休符などは「いつ弾くか」を表します。
+      </p>
+
+      <ol>
+        <li><b>1</b><span><strong>数字はいったん無視</strong><small>最初は弦やフレットではなく、リズムの形だけを見ます。</small></span></li>
+        <li><b>2</b><span><strong>リズム表記をHIKERUに写す</strong><small>手元のTAB譜と同じ符幹・連桁・休符の形を選びます。</small></span></li>
+        <li><b>3</b><span><strong>数字なしで再生する</strong><small>まずタイミングだけを耳で確認します。</small></span></li>
+        <li><b>4</b><span><strong>必要なら弦・フレットを入力</strong><small>TAB譜の○をタップし、左から順に「弦 → フレット」を入力します。</small></span></li>
+      </ol>
+    </section>
 
 
     <label class="tutorial-hide">
@@ -1462,6 +1682,7 @@
     </button>
 
   </dialog>
+
 
 
   <!-- =====================================
@@ -1504,6 +1725,7 @@
     </div>
 
   </dialog>
+
 
 
   <script

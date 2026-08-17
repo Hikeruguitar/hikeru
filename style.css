@@ -3224,307 +3224,309 @@ input:checked
 
 }
 
-
 /* =========================================================
-   REQUESTED FIXES ONLY
+   Ver.0.2 TAB VIEW
+   Existing HIKERU styles above are unchanged.
 ========================================================= */
 
-/* 入力・編集の音符・休符・記号を濃くする */
-.editor-tray .vf-icon,
-.editor-tray .symbol-preview,
-.editor-tray .tuplet-input-icon {
-  color: var(--text);
-  opacity: 1;
-}
-
-
-.editor-tray .symbol-preview {
-  font-weight: 700;
-}
-
-
-.editor-tray .vf-icon svg,
-.editor-tray .symbol-preview.tuplet svg,
-.editor-tray .tuplet-input-icon svg {
-  opacity: 1;
-
-  filter:
-    contrast(1.35);
-}
-
-
-.editor-tray .vf-icon svg path,
-.editor-tray .vf-icon svg rect,
-.editor-tray .vf-icon svg polygon,
-.editor-tray .symbol-preview.tuplet svg path,
-.editor-tray .symbol-preview.tuplet svg rect,
-.editor-tray .symbol-preview.tuplet svg polygon,
-.editor-tray .tuplet-input-icon svg path,
-.editor-tray .tuplet-input-icon svg rect,
-.editor-tray .tuplet-input-icon svg polygon {
-  fill:
-    var(--text) !important;
-}
-
-
-.editor-tray .vf-icon svg line,
-.editor-tray .symbol-preview.tuplet svg line,
-.editor-tray .tuplet-input-icon svg line {
-  stroke:
-    var(--text) !important;
-}
-
-
-.editor-tray .symbol-preview.tuplet svg text,
-.editor-tray .tuplet-input-icon svg text {
-  fill:
-    var(--text) !important;
-}
-
-
-/* 「その他の記号」は音符・休符と同じ白背景 */
-.symbol-palette .notation-button:nth-child(1),
-.symbol-palette .notation-button:nth-child(2),
-.symbol-palette .notation-button:nth-child(3),
-.symbol-palette .notation-button:nth-child(4),
-.symbol-palette .notation-button:nth-child(5) {
-  background:
-    #ffffff;
-}
-
-
-/* 入力の3連符・5連符。旧HTML / 更新HTMLの両方に対応 */
-.editor-tray .symbol-preview.tuplet,
-.editor-tray .tuplet-input-icon {
-  width: 86px;
-  height: 54px;
-
-  display: grid;
-
-  place-items: center;
-
-  margin:
-    0 auto 5px;
-
-  overflow: visible;
-}
-
-
-.editor-tray .symbol-preview.tuplet svg,
-.editor-tray .tuplet-input-icon svg {
-  width:
-    86px !important;
-
-  height:
-    54px !important;
-
-  display: block;
-
-  overflow: visible;
-}
-
-
-/* 譜面上の音符・休符をクリックして変更する透明ヒット領域 */
-.hikeru-item-edit-target {
-  border:
-    1px solid
-    transparent;
-
-  background:
-    transparent;
-
-  cursor: pointer;
-
-  transition:
-    background 0.12s ease,
-    border-color 0.12s ease;
-}
-
-
-.hikeru-item-edit-target:hover,
-.hikeru-item-edit-target:focus-visible {
-  border-color:
-    rgba(93, 120, 144, 0.24);
-
-  background:
-    rgba(144, 171, 195, 0.08);
-}
-
-
-/* 音符・休符の変更ダイアログ */
-.score-edit-dialog {
-  width:
-    min(
-      430px,
-      calc(100% - 28px)
-    );
-
-  padding: 0;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:
-    var(--radius-large);
-
-  background:
-    #ffffff;
-
-  color:
-    var(--text);
-
-  box-shadow:
-    var(--shadow-floating);
-}
-
-
-.score-edit-dialog::backdrop {
-  background:
-    rgba(25, 31, 36, 0.22);
-
-  backdrop-filter:
-    blur(2px);
-}
-
-
-.score-edit-shell {
-  padding: 22px;
-}
-
-
-.score-edit-head {
+.score-title-row {
   display: flex;
-
-  align-items: flex-start;
-  justify-content: space-between;
-
-  gap: 14px;
-
-  margin-bottom: 18px;
-}
-
-
-.score-edit-head h2 {
-  margin: 0;
-
-  font-size: 20px;
-}
-
-
-.score-edit-head p {
-  margin:
-    6px 0 0;
-
-  color:
-    var(--muted);
-
-  font-size: 11px;
-}
-
-
-.score-edit-close {
-  width: 38px;
-  height: 38px;
-
-  flex: 0 0 auto;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius: 11px;
-
-  background:
-    #ffffff;
-
-  cursor: pointer;
-
-  font-size: 20px;
-}
-
-
-.score-edit-options {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      5,
-      minmax(0, 1fr)
-    );
-
-  gap: 8px;
-}
-
-
-.score-edit-option {
-  min-height: 70px;
-
-  padding:
-    9px 5px;
-
-  display: flex;
-
-  flex-direction: column;
-
   align-items: center;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-  gap: 4px;
+.score-title-row h2 {
+  margin: 0;
+}
 
-  border:
-    1px solid
-    var(--border);
-
-  border-radius: 13px;
-
-  background:
-    #ffffff;
-
+.score-view-toggle {
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--accent-dark);
   cursor: pointer;
-
-  text-align: center;
-
   font-size: 10px;
-  font-weight: 750;
+  font-weight: 800;
 }
 
+.score-view-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-soft);
+}
 
-.score-edit-option small {
-  color:
-    var(--muted);
+.score-view-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 
+.tab-score-render {
+  position: absolute;
+  inset: 0;
+  width: 880px;
+  height: 220px;
+  display: block;
+  background: #ffffff;
+}
+
+.tab-score-render.is-hidden {
+  display: none;
+}
+
+.tab-score-note {
+  margin: 8px 2px 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+/* TAB編集時だけ譜面を上部に残す。通常の五線譜編集には影響させない。 */
+.score-panel.is-tab-view.is-editing .score-sticky {
+  position: sticky;
+  top: 8px;
+  z-index: 20;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(31, 43, 54, 0.10);
+}
+
+/* TAB表示中の入力アイコン。SVG自体はapp.jsでTAB譜本体と同じ描画処理を使う。 */
+.score-panel.is-tab-view .vf-icon {
+  width: 112px;
+  height: 74px;
+}
+
+.score-panel.is-tab-view .notation-button[data-kind="note"] {
+  min-height: 132px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  gap: 2px;
+}
+
+.score-panel.is-tab-view .notation-button[data-kind="note"] b {
+  margin-top: 1px;
+}
+
+/* =========================================================
+   TAB INPUT / ITEM EDIT
+========================================================= */
+
+.tab-sub-editor {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  background: var(--surface-soft);
+}
+
+.tab-sub-editor h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.tab-input-progress {
+  margin: 0 0 13px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.6;
+}
+
+.tab-input-step {
+  margin-top: 13px;
+}
+
+.tab-input-step > strong,
+.item-edit-tab-fields > strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.tab-string-buttons {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.tab-string-buttons button {
+  min-height: 43px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.tab-string-buttons button:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-soft);
+}
+
+.tab-string-buttons button.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.tab-fret-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tab-fret-row input,
+.item-edit-grid input,
+.item-edit-grid select {
+  height: 42px;
+  padding: 0 11px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+}
+
+.tab-fret-row input {
+  width: 120px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.item-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.item-edit-grid label {
+  display: grid;
+  gap: 5px;
+}
+
+.item-edit-grid label > span {
+  color: var(--muted);
   font-size: 9px;
+  font-weight: 800;
 }
 
-
-.score-edit-option.is-current {
-  border-color:
-    var(--accent);
-
-  background:
-    var(--accent-soft);
-
-  color:
-    var(--accent-dark);
+.item-edit-tab-fields {
+  margin-top: 14px;
 }
 
+.tab-edit-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
 
-@media (
-  max-width: 700px
-) {
+.tab-sub-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
 
-  .score-edit-options {
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
+.tab-primary-button,
+.tab-secondary-button,
+.tab-danger-button {
+  min-height: 40px;
+  padding: 0 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.tab-primary-button {
+  border: 0;
+  background: var(--play);
+  color: #ffffff;
+}
+
+.tab-secondary-button {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text-soft);
+}
+
+.tab-danger-button {
+  border: 0;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.tab-primary-button:hover,
+.tab-secondary-button:hover,
+.tab-danger-button:hover {
+  filter: brightness(0.98);
+}
+
+/* =========================================================
+   TAB RHYTHM MANUAL
+========================================================= */
+
+.tab-reading-guide {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  background: var(--surface-soft);
+}
+
+.tab-reading-guide h3 {
+  margin: 4px 0 9px;
+  font-size: 16px;
+}
+
+.tab-reading-core {
+  margin: 0 0 14px;
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.tab-reading-guide .tutorial-steps {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .score-title-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
   }
 
-
-  .score-edit-option {
-    min-height: 58px;
+  .score-panel.is-tab-view.is-editing .score-sticky {
+    top: 4px;
   }
 
+  .tab-string-buttons {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .item-edit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tab-fret-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .tab-fret-row input {
+    width: 100%;
+  }
 }
