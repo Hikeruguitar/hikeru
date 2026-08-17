@@ -3604,9 +3604,7 @@ html.is-touch-ui .tab-string-buttons button {
   }
 
   html.is-fret-input-focused
-  .tab-fret-row input,
-  html.is-fret-input-focused
-  .item-edit-fret-field input {
+  .tab-fret-row input {
     scroll-margin-block: 12px;
   }
 
