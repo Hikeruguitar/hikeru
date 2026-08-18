@@ -3617,8 +3617,6 @@ html.is-touch-ui .speed-buttons button {
   }
 
   html.is-fret-input-focused
-  .score-panel.is-editing .score-sticky,
-  html.is-fret-input-focused
   .input-tabs,
   html.is-fret-input-focused
   .playback-panel {
