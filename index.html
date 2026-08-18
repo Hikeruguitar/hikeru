@@ -14,6 +14,33 @@
     content="#ffffff"
   >
 
+  <meta
+    name="description"
+    content="TAB譜のリズムを入力し、五線譜とTAB譜を見ながら音で確認できるWebアプリです。"
+  >
+
+  <link
+    rel="canonical"
+    href="https://hikeruguitar.github.io/hikeru/"
+  >
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="KIKUtab">
+  <meta
+    property="og:description"
+    content="TAB譜のリズムを、見て・聴いて理解する。"
+  >
+  <meta
+    property="og:url"
+    content="https://hikeruguitar.github.io/hikeru/"
+  >
+
+  <link
+    rel="icon"
+    href="favicon.svg"
+    type="image/svg+xml"
+  >
+
   <title>KIKUtab</title>
 
   <link
@@ -1395,6 +1422,7 @@
   <dialog
     id="reference-detail-dialog"
     class="reference-detail-dialog"
+    aria-labelledby="reference-detail-name"
   >
 
     <div class="reference-detail-shell">
@@ -1580,6 +1608,7 @@
   <dialog
     id="tutorial-dialog"
     class="dialog"
+    aria-labelledby="tutorial-title"
   >
 
     <div class="tutorial-head">
@@ -1590,7 +1619,7 @@
           HOW TO USE
         </div>
 
-        <h2>
+        <h2 id="tutorial-title">
           KIKUtabの使い方
         </h2>
 
@@ -1694,9 +1723,10 @@
   <dialog
     id="clear-dialog"
     class="dialog"
+    aria-labelledby="clear-title"
   >
 
-    <h2>
+    <h2 id="clear-title">
       譜面をクリアしますか？
     </h2>
 

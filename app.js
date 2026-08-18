@@ -126,6 +126,7 @@ const vexNoteById = new Map();
 let idCounter = 0;
 let toastTimer = null;
 let referenceAuditionTimer = null;
+let fretInputRevealTimer = null;
 let activeScoreEditItemId = null;
 let storageWarningShown = false;
 
@@ -1906,13 +1907,18 @@ function ensureScoreEditDialog() {
   dialog.className =
     "score-edit-dialog";
 
+  dialog.setAttribute(
+    "aria-labelledby",
+    "score-edit-title"
+  );
+
   dialog.innerHTML = `
     <div class="score-edit-shell">
 
       <div class="score-edit-head">
 
         <div>
-          <h2>
+          <h2 id="score-edit-title">
             音符・休符を変更
           </h2>
 
@@ -4395,9 +4401,6 @@ function makeScoreControlButton() {
   button.style.color =
     "transparent";
 
-  button.style.outline =
-    "none";
-
   button.style.fontSize =
     "0";
 
@@ -4448,6 +4451,16 @@ function renderSymbolTargetButtons() {
             !validity.valid
           )
         );
+
+        button.tabIndex =
+          validity.valid
+            ? 0
+            : -1;
+
+        button.style.pointerEvents =
+          validity.valid
+            ? "auto"
+            : "none";
 
         button.style.left =
           `${layout.x - 23}px`;
@@ -10982,6 +10995,86 @@ function getFocusedFretInput() {
 }
 
 
+function calculateRevealScrollDelta(
+  rectTop,
+  rectBottom,
+  visibleTop,
+  visibleBottom
+) {
+  if (rectTop < visibleTop) {
+    return rectTop - visibleTop;
+  }
+
+  if (rectBottom > visibleBottom) {
+    return rectBottom - visibleBottom;
+  }
+
+  return 0;
+}
+
+
+function stickyObstructionBottom(
+  element,
+  viewportTop
+) {
+  if (!element) {
+    return viewportTop;
+  }
+
+  const style =
+    window.getComputedStyle(
+      element
+    );
+
+  if (
+    style.display === "none"
+    ||
+    style.visibility === "hidden"
+    ||
+    ![
+      "fixed",
+      "sticky"
+    ].includes(
+      style.position
+    )
+  ) {
+    return viewportTop;
+  }
+
+  const rect =
+    element.getBoundingClientRect();
+
+  const declaredTop =
+    Number.parseFloat(
+      style.top
+    );
+
+  const stuckTop =
+    viewportTop
+    +
+    (
+      Number.isFinite(
+        declaredTop
+      )
+        ? declaredTop
+        : 0
+    );
+
+  if (
+    style.position === "sticky"
+    &&
+    rect.top > stuckTop + 2
+  ) {
+    return viewportTop;
+  }
+
+  return Math.max(
+    viewportTop,
+    rect.bottom
+  );
+}
+
+
 function revealFocusedFretInput() {
   if (
     !document.documentElement
@@ -11000,7 +11093,14 @@ function revealFocusedFretInput() {
   }
 
   const rect =
-    input.getBoundingClientRect();
+    (
+      input.closest(
+        ".tab-fret-row"
+      )
+      ||
+      input
+    )
+      .getBoundingClientRect();
 
   const viewport =
     window.visualViewport;
@@ -11016,30 +11116,38 @@ function revealFocusedFretInput() {
     window.innerHeight;
 
   const visibleTop =
-    viewportTop
-    + 12;
+    Math.max(
+      viewportTop + 12,
+
+      stickyObstructionBottom(
+        dom.scorePanel
+          ?.querySelector(
+            ".score-sticky"
+          ),
+        viewportTop
+      ) + 12,
+
+      stickyObstructionBottom(
+        dom.editorTray
+          ?.querySelector(
+            ".input-tabs"
+          ),
+        viewportTop
+      ) + 12
+    );
 
   const visibleBottom =
     viewportTop
     + viewportHeight
     - 12;
 
-  let scrollDelta = 0;
-
-  if (rect.top < visibleTop) {
-    scrollDelta =
-      rect.top
-      - visibleTop;
-  }
-
-  else if (
-    rect.bottom
-      > visibleBottom
-  ) {
-    scrollDelta =
-      rect.bottom
-      - visibleBottom;
-  }
+  const scrollDelta =
+    calculateRevealScrollDelta(
+      rect.top,
+      rect.bottom,
+      visibleTop,
+      visibleBottom
+    );
 
   if (!scrollDelta) {
     return;
@@ -11062,6 +11170,35 @@ function revealFocusedFretInput() {
 }
 
 
+function scheduleFocusedFretInputReveal(
+  delay = 80
+) {
+  if (!getFocusedFretInput()) {
+    return;
+  }
+
+  if (
+    fretInputRevealTimer
+      !== null
+  ) {
+    window.clearTimeout(
+      fretInputRevealTimer
+    );
+  }
+
+  fretInputRevealTimer =
+    window.setTimeout(
+      () => {
+        fretInputRevealTimer =
+          null;
+
+        revealFocusedFretInput();
+      },
+      delay
+    );
+}
+
+
 function handleFretInputFocus() {
   if (
     !window.matchMedia(
@@ -11076,18 +11213,25 @@ function handleFretInputFocus() {
       "is-fret-input-focused"
     );
 
-  requestAnimationFrame(
-    revealFocusedFretInput
-  );
-
-  window.setTimeout(
-    revealFocusedFretInput,
-    350
+  scheduleFocusedFretInputReveal(
+    240
   );
 }
 
 
 function handleFretInputBlur() {
+  if (
+    fretInputRevealTimer
+      !== null
+  ) {
+    window.clearTimeout(
+      fretInputRevealTimer
+    );
+
+    fretInputRevealTimer =
+      null;
+  }
+
   window.setTimeout(
     () => {
       if (getFocusedFretInput()) {
@@ -11099,7 +11243,7 @@ function handleFretInputBlur() {
           "is-fret-input-focused"
         );
     },
-    0
+    180
   );
 }
 
@@ -11228,7 +11372,9 @@ function selectTabString(
   requestAnimationFrame(
     () =>
       dom.tabFretInput
-        ?.focus()
+        ?.focus({
+          preventScroll: true
+        })
   );
 }
 
@@ -13251,7 +13397,10 @@ function bindTabEvents() {
   window.visualViewport
     ?.addEventListener(
       "resize",
-      revealFocusedFretInput
+      () =>
+        scheduleFocusedFretInputReveal(
+          80
+        )
     );
 
   dom.tabInputCancel
