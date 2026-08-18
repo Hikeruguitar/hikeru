@@ -128,6 +128,15 @@ button:disabled {
 }
 
 
+.kikutab-score-control:focus-visible {
+  outline:
+    3px solid
+    rgba(93, 120, 144, 0.75);
+
+  outline-offset: -3px;
+}
+
+
 .is-hidden {
   display: none !important;
 }
@@ -3553,6 +3562,17 @@ html.is-touch-ui .tab-string-buttons button {
   user-select: none;
 }
 
+html.is-touch-ui .bpm-row button {
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+html.is-touch-ui .input-tab,
+html.is-touch-ui .speed-buttons button {
+  min-height: 44px;
+}
+
 @media (max-width: 760px) {
   .app-shell {
     width: min(100% - 20px, 1160px);
@@ -3599,8 +3619,11 @@ html.is-touch-ui .tab-string-buttons button {
   html.is-fret-input-focused
   .score-panel.is-editing .score-sticky,
   html.is-fret-input-focused
-  .input-tabs {
-    position: static;
+  .input-tabs,
+  html.is-fret-input-focused
+  .playback-panel {
+    visibility: hidden;
+    pointer-events: none;
   }
 
   html.is-fret-input-focused

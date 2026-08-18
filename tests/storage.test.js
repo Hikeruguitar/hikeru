@@ -219,3 +219,36 @@ test("空の譜面でもBPMは復元する", () => {
   assert.equal(runtime.evaluate("restoreState()"), false);
   assert.equal(runtime.evaluate("state.bpm"), 96);
 });
+
+test("入力欄が表示範囲内なら画面を動かさない", () => {
+  const runtime = makeRuntime();
+
+  assert.equal(
+    runtime.evaluate(
+      "calculateRevealScrollDelta(120, 166, 12, 488)"
+    ),
+    0
+  );
+});
+
+test("入力欄の下がキーボードに隠れた分だけ移動する", () => {
+  const runtime = makeRuntime();
+
+  assert.equal(
+    runtime.evaluate(
+      "calculateRevealScrollDelta(442, 520, 12, 488)"
+    ),
+    32
+  );
+});
+
+test("固定表示に隠れた入力欄を下へ戻す", () => {
+  const runtime = makeRuntime();
+
+  assert.equal(
+    runtime.evaluate(
+      "calculateRevealScrollDelta(180, 226, 210, 488)"
+    ),
+    -30
+  );
+});
