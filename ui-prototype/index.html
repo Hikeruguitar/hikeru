@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+  <meta name="theme-color" content="#ffffff">
+  <title>KIKUtab UI Prototype</title>
+  <link rel="stylesheet" href="prototype.css">
+</head>
+
+<body>
+  <div class="prototype-app">
+    <header class="prototype-header">
+      <div class="brand-block">
+        <span class="brand-mark" aria-hidden="true">♪</span>
+        <div>
+          <div class="brand-name">KIKUtab</div>
+          <div class="prototype-label">UI PROTOTYPE</div>
+        </div>
+      </div>
+
+      <div class="history-actions" aria-label="編集履歴">
+        <button id="undo-button" class="icon-action" type="button" disabled>
+          <span aria-hidden="true">↶</span>
+          <span>戻す</span>
+        </button>
+        <button id="redo-button" class="icon-action" type="button" disabled>
+          <span aria-hidden="true">↷</span>
+          <span>進む</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="prototype-notice">
+      次期UIを比較するための試作品です。本番版のデータは使用・保存しません。
+    </div>
+
+    <main class="prototype-layout">
+      <section class="score-workspace" aria-label="譜面と再生">
+        <div class="score-heading">
+          <div>
+            <span class="eyebrow">YOUR RHYTHM</span>
+            <h1>分からない部分だけ、すぐ確認</h1>
+          </div>
+          <div id="measure-status" class="measure-status">1小節目：残り4拍</div>
+        </div>
+
+        <div
+          id="score-scroll"
+          class="score-scroll"
+          aria-label="譜面。横方向にスクロールできます"
+        >
+          <div id="score-canvas" class="score-canvas">
+            <div class="measure-label measure-label-first">1小節目</div>
+            <div class="measure-label measure-label-second">2小節目</div>
+
+            <div class="staff-label">RHYTHM</div>
+            <div class="staff-lines" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+
+            <div class="tab-label">TAB</div>
+            <div class="tab-lines" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+
+            <div class="measure-bar measure-bar-start" aria-hidden="true"></div>
+            <div class="measure-bar measure-bar-middle" aria-hidden="true"></div>
+            <div class="measure-bar measure-bar-end" aria-hidden="true"></div>
+
+            <div id="empty-score" class="empty-score">
+              下から音の長さを選ぶと、ここに譜面ができます
+            </div>
+            <div id="score-notes" class="score-notes"></div>
+            <div id="playback-cursor" class="playback-cursor" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="transport" aria-label="再生操作">
+          <button id="play-button" class="play-button" type="button">
+            <span id="play-icon" aria-hidden="true">▶</span>
+            <span id="play-label">再生</span>
+          </button>
+          <button id="restart-button" class="transport-button" type="button">
+            <span aria-hidden="true">↤</span>
+            <span>先頭</span>
+          </button>
+          <button
+            id="loop-button"
+            class="transport-button"
+            type="button"
+            aria-pressed="false"
+          >
+            <span aria-hidden="true">↻</span>
+            <span>LOOP</span>
+          </button>
+          <button id="speed-button" class="speed-button" type="button">
+            <span id="speed-label">100%</span>
+          </button>
+        </div>
+      </section>
+
+      <aside class="input-panel" aria-label="入力パネル">
+        <ol class="step-indicator" aria-label="入力ステップ">
+          <li data-step-marker="duration" class="is-current">
+            <span>1</span>
+            <b>音の長さ</b>
+          </li>
+          <li data-step-marker="string">
+            <span>2</span>
+            <b>弦</b>
+          </li>
+          <li data-step-marker="fret">
+            <span>3</span>
+            <b>フレット</b>
+          </li>
+        </ol>
+
+        <div class="input-title-row">
+          <div>
+            <div id="step-kicker" class="step-kicker">STEP 1</div>
+            <h2 id="step-title">1個目の音を入力</h2>
+          </div>
+          <button
+            id="close-selection-button"
+            class="quiet-button is-hidden"
+            type="button"
+          >
+            閉じる
+          </button>
+        </div>
+
+        <p id="step-guide" class="step-guide">
+          音符か休符を選び、音の長さを選んでください。
+        </p>
+
+        <section id="duration-step" class="input-step">
+          <div class="kind-toggle" role="group" aria-label="音符または休符">
+            <button
+              class="kind-button is-selected"
+              data-kind="note"
+              type="button"
+              aria-pressed="true"
+            >
+              ♪ 音符
+            </button>
+            <button
+              class="kind-button"
+              data-kind="rest"
+              type="button"
+              aria-pressed="false"
+            >
+              休 休符
+            </button>
+          </div>
+
+          <div class="duration-label-row">
+            <strong>音の長さを選ぶ</strong>
+            <span>横に動かせます →</span>
+          </div>
+
+          <div class="duration-strip">
+            <button class="duration-button" data-duration="whole" type="button">
+              <span class="duration-symbol" data-note-symbol="𝅝">𝅝</span>
+              <b>全音符</b>
+              <small>4拍</small>
+            </button>
+            <button class="duration-button" data-duration="half" type="button">
+              <span class="duration-symbol" data-note-symbol="𝅗𝅥">𝅗𝅥</span>
+              <b>2分音符</b>
+              <small>2拍</small>
+            </button>
+            <button class="duration-button" data-duration="quarter" type="button">
+              <span class="duration-symbol" data-note-symbol="♩">♩</span>
+              <b>4分音符</b>
+              <small>1拍</small>
+            </button>
+            <button class="duration-button" data-duration="eighth" type="button">
+              <span class="duration-symbol" data-note-symbol="♪">♪</span>
+              <b>8分音符</b>
+              <small>1/2拍</small>
+            </button>
+            <button class="duration-button" data-duration="sixteenth" type="button">
+              <span class="duration-symbol" data-note-symbol="♬">♬</span>
+              <b>16分音符</b>
+              <small>1/4拍</small>
+            </button>
+          </div>
+        </section>
+
+        <section id="string-step" class="input-step is-hidden">
+          <div id="selected-duration-summary" class="selected-summary"></div>
+          <strong class="field-heading">弦を選ぶ</strong>
+          <div class="string-grid">
+            <button data-string="1" type="button"><b>1弦</b><small>いちばん細い</small></button>
+            <button data-string="2" type="button"><b>2弦</b><small></small></button>
+            <button data-string="3" type="button"><b>3弦</b><small></small></button>
+            <button data-string="4" type="button"><b>4弦</b><small></small></button>
+            <button data-string="5" type="button"><b>5弦</b><small></small></button>
+            <button data-string="6" type="button"><b>6弦</b><small>いちばん太い</small></button>
+          </div>
+        </section>
+
+        <section id="fret-step" class="input-step is-hidden">
+          <div class="fret-summary">
+            <div>
+              <span>選択中</span>
+              <strong id="selected-string-label">3弦</strong>
+            </div>
+            <button id="back-to-string-button" class="quiet-button" type="button">
+              弦を変更
+            </button>
+          </div>
+
+          <label class="fret-display-label" for="fret-display">フレット番号</label>
+          <output id="fret-display" class="fret-display" for="fret-keypad">—</output>
+
+          <div id="fret-keypad" class="fret-keypad" aria-label="フレット番号キー">
+            <button data-digit="1" type="button">1</button>
+            <button data-digit="2" type="button">2</button>
+            <button data-digit="3" type="button">3</button>
+            <button data-digit="4" type="button">4</button>
+            <button data-digit="5" type="button">5</button>
+            <button data-digit="6" type="button">6</button>
+            <button data-digit="7" type="button">7</button>
+            <button data-digit="8" type="button">8</button>
+            <button data-digit="9" type="button">9</button>
+            <button id="fret-clear-button" class="key-secondary" type="button">消す</button>
+            <button data-digit="0" type="button">0</button>
+            <button id="fret-backspace-button" class="key-secondary" type="button">⌫</button>
+          </div>
+
+          <button id="confirm-fret-button" class="primary-action" type="button">
+            このTAB情報で決定
+          </button>
+        </section>
+
+        <section id="edit-step" class="input-step is-hidden">
+          <div id="edit-summary" class="edit-summary"></div>
+          <div class="edit-actions">
+            <button id="edit-tab-button" class="secondary-action" type="button">
+              弦・フレットを変更
+            </button>
+            <button id="delete-note-button" class="danger-action" type="button">
+              この音を削除
+            </button>
+          </div>
+        </section>
+
+        <div id="feedback" class="feedback" role="status" aria-live="polite">
+          音価には「何拍か」を常に表示します。
+        </div>
+      </aside>
+    </main>
+
+    <footer class="prototype-footer">
+      譜面上の音をタップすると、その音に必要な操作だけを表示します。
+    </footer>
+  </div>
+
+  <script src="prototype.js"></script>
+</body>
+
+</html>
